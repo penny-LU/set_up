@@ -2,6 +2,7 @@
 #先安裝可能缺少的東西
 sudo apt-get install python3 -y
 sudo apt-get install python3-tk -y
+sudo apt-get install python3-numpy -y
 sudo apt-get install docker -y
 sudo apt-get install docker-compose -y
 
