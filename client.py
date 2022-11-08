@@ -13,9 +13,9 @@ if __name__ == '__main__':
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((HOST, PORT))
+    outdata = 'new connecting !'
 
     while True:
-        outdata = 'connecting !'
         print('send: ' + outdata)
         s.send(outdata.encode())
 
@@ -25,10 +25,9 @@ if __name__ == '__main__':
             print('server closed connection.')
             break
         else:
-            # indata = 1 0 0 image-path video-path camera-path
             print('recv1: ' + indata.decode())
             indata = "python3 execute.py "+ indata.decode()
             os.system(indata) #pull
-            print('exec2: ' + indata)
+            outdata="done!"
 
     exit(0) #end client.py
