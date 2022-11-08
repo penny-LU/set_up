@@ -39,19 +39,21 @@ class YAML:
         if ( self.image == "1" ) :
             service_text = ""
             yaml_text = yaml_text + "  picture:\n"
-            self.service_basic_setting(service_text,"chen0109/picture:latest", True)
+            self.service_basic_setting(service_text,"chiz0943/image_output_path:latest", True)
+            yaml_text = yaml_text + service_text + "\n"
+            self.service_basic_setting(service_text,"chiz0943/image_only_input:latest", True)
             yaml_text = yaml_text + service_text + "\n"
 
         if ( self.video == "1" ) :
             service_text = ""
             yaml_text = yaml_text + "  video:\n"
-            self.service_basic_setting(service_text,"chen0109/video:latest", True)
+            self.service_basic_setting(service_text,"chiz0943/video_output_path:latest", True)
             yaml_text = yaml_text + service_text + "\n"
 
         if ( self.real_time == "1" ) :
             service_text = ""
             yaml_text = yaml_text + "  real_time:\n"
-            self.service_basic_setting(service_text,"chen0109/real_time:latest", False)
+            self.service_basic_setting(service_text,"chiz0943/video_only_input:latest", False)
             yaml_text = yaml_text + service_text + "\n"
 
         self.OutFile( outName, yaml_text )
@@ -164,4 +166,3 @@ if __name__ == '__main__':
         createYaml.YAML_main()
     doingPull.pull_main()
     doingALL.start_main()
-
