@@ -1,27 +1,27 @@
 # -*- coding: utf-8 -*-
 import socket
+import os 
 import numpy as np
+import sys
 from _thread import *
+from multiprocessing import Process
 import threading
+import queue
+
+global ip_list,sock_list
+ip_list = list()
+sock_list=list()
+
+def check_ip_list( addr ):
+	index_num = ip_list.index(str(addr))
+	return index_num
 
 
-def check_ip_list(ip_list, addr, index_num):
-	try:
-		index_num = ip_list.index(str(addr))
-	except ValueError:
-		ip_list.append(str(addr))
-
-
-def threaded(conn,target_ip):
+def execute(client_sock,target_ip):
 	output_instr = ""
-	ability_list = ["0" for i in range(8)]
+	#ability_list = ["0" for i in range(8)]
 	while True:
-		indata = conn.recv(1024)
-		if len(indata) == 0: # connection closed
-			conn.close()
-			print('client closed connection.')
-			break
-
+		"""
 		instr = input("請輸入該client需擁有的功能\n")
 		instr_list = instr.split(' ')
 		i = 0
@@ -52,21 +52,67 @@ def threaded(conn,target_ip):
 		# 只會傳送 0 1 1 這種 前面不需要了
 		# 後面需接 image辨識掛載目錄 / video辨識掛載目錄 / real_time掛載的camera
 
+		"""
+		output_instr = "1 0 0 /home/chiz/shareeee/image /home/chiz/shareeee/image_result 0 0 0"
 		print('send to client : ' + output_instr)
+		main_process.set()
+
 		outdata = output_instr
-		conn.sendto(outdata.encode(),eval(target_ip))
-		ability_list = ["0" for i in range(8)]
+		client_sock.send(outdata.encode())
+		#ability_list = ["0" for i in range(8)]
 		output_instr=""
-		conn.close()
+		indata = client_sock.recv(1024)
+		if( indata.decode() == "done!"):
+			break
+		elif(len(indata) == 0):
+			index_num = check_ip_list(target_ip)
+			ip_list.pop(int(index_num))
+			sock_list.pop(int(index_num))
+			break
+
+		
+
+	
+def new_connect(client_sock): #先完成連線
+	indata = client_sock.recv(1024)
+	print_connected_ip()
+	
+
+def print_connected_ip():
+	print("===已連線的ip===")
+	for i in range(len(ip_list)):
+		print("[",i,"]",ip_list[i])
+	
+	print("================")
+
+def update_connected_ip():
+	refresh=""
+	refresh = input("若需重新整理連線清單請輸入0，其餘選項將進行任務分配\n")
+	while( refresh == "0"):
+		print_connected_ip()
+		refresh=""
+		refresh = input("若需重新整理連線清單請輸入0，其餘選項將進行任務分配\n")
+
+
+
+def already_connect(): #等待連線
+	while True :
+		update_connected_ip()
+		index = input("請選擇欲指定的client(輸入序號即可)\n")
+		while( len(index) != 1 or int(index) > len(ip_list) or int(index) < 0 ):
+			#print(type(index))
+			index = input("請選擇欲指定的client(輸入序號即可)\n")
+		target_ip = ip_list[int(index)]
+		client_sock = sock_list[int(index)]
+		doing_now=threading.Thread(target=execute, args=[client_sock,target_ip])
+		doing_now.start()
+		#execute(client_sock,target_ip)
+		main_process.wait()
+
 
 if __name__ == '__main__':
 	HOST = '127.0.0.1'
 	PORT = 48331
-
-	# server接收到要指定出戰的ip跟指令碼
-	# 所以Server需要紀錄所有已連線&&空閒的的client-ip
-	# 然後選擇要出去的是誰
-
 
 	# 建立socket 設定使用的通訊協定
 	server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -78,33 +124,19 @@ if __name__ == '__main__':
 
 	print('server start at: %s:%s' % (HOST, PORT))
 	print('wait for connection...')
-	ip_list=list()
 	index_num="-1"
-
+	main_process = threading.Event()
+	first = threading.Thread(target=already_connect)
+	first.start()
 	while True:
 		# TCP建立後收到的回應 conn是新的socket類型 addr是client的
 		client_sock, client_addr = server.accept()
 		print('connected by ' + str(client_addr))
-		
-		# 確認這個ip有沒有出現過，有的話就是做完回來的
-		check_ip_list(ip_list, client_addr, index_num )
-		print("===已連線的ip===")
-		for i in range(len(ip_list)):
-			print("[",i,"]",ip_list[i])
-		refresh = input("若需重新整理連線清單請輸入0，其餘選項將進行任務分配\n")
-		
-		if(refresh != "0"):
-			index = input("請選擇欲指定的client(輸入序號即可)")
-			target_ip = ip_list[int(index)]
-			ip_list.remove(target_ip)
-			start_new_thread(threaded, (client_sock,target_ip,))
-		
-		refresh=""
 
-	server.close()
-
+		ip_list.append(str(client_addr))
+		sock_list.append(client_sock)
+		new_connect(client_sock)
+			
+			
 # py3接收的資料型別為byte 所以要用decode()把str轉換byte(反之亦然)
-
-
-
 
