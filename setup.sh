@@ -5,6 +5,10 @@ sudo apt-get install python3-tk -y
 sudo apt-get install python3-numpy -y
 sudo apt-get install docker -y
 sudo apt-get install docker-compose -y
+xhost +local:docker
+XSOCK=/tmp/.X11-unix
+XAUTH=/tmp/.docker.xauth
+
 
 
 #設定之後開機自動執行腳本
