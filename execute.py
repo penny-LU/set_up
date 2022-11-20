@@ -49,11 +49,13 @@ class YAML:
             yaml_text = yaml_text + "  video:\n"
             self.service_basic_setting(service_text,"chiz0943/video_output_path:latest", True)
             yaml_text = yaml_text + service_text + "\n"
+            self.service_basic_setting(service_text,"chiz0943/video_only_input:latest", False)
+            yaml_text = yaml_text + service_text + "\n"
 
         if ( self.real_time == "1" ) :
             service_text = ""
             yaml_text = yaml_text + "  real_time:\n"
-            self.service_basic_setting(service_text,"chiz0943/video_only_input:latest", False)
+            self.service_basic_setting(service_text,"chiz0943/real_time:latest", False)
             yaml_text = yaml_text + service_text + "\n"
 
         self.OutFile( outName, yaml_text )
@@ -86,7 +88,7 @@ class pull:
                 else:
                     out = out + "chiz0943/video_only_input:latest"
             if (real_time == True or real_time == "1") :
-                out = out + "chen0109/real_time:latest"
+                out = out + "chiz0943/real_time:latest"
 
             os.system(out) #pull command
         else :
@@ -130,7 +132,7 @@ class start:
         print("========== Video detection ==========")
 
     def doingRealTime(self): #還需掛載camera的device
-        command = "docker run -v " +self.camera_path+":/temp chen0109/real_time "
+        command = "docker run -v " +self.camera_path+":/temp chiz0943/real_time "
         #os.system(command)
         print(command)
         print("========== RealTime detection ==========")
