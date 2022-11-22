@@ -31,7 +31,7 @@ sudo echo "Restart=always" >> /etc/systemd/system/start_connect.service
 sudo echo "RestartSec=3s" >> /etc/systemd/system/start_connect.service
 
 #之後開機自動啟動服務
-#sudo systemctl enable start_connect.service
+sudo systemctl enable start_connect.service
 
 #其餘指令：
 #手動啟動服務：sudo systemctl start start_connect.service
