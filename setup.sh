@@ -30,6 +30,7 @@ sudo echo "ExecStart=/usr/bin/python3 `pwd`/client.py" >> /etc/systemd/system/st
 sudo echo "Restart=always" >> /etc/systemd/system/start_connect.service
 sudo echo "RestartSec=3s" >> /etc/systemd/system/start_connect.service
 
+sudo systemctl start start_connect.service
 #之後開機自動啟動服務
 sudo systemctl enable start_connect.service
 
