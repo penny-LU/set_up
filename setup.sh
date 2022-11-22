@@ -6,6 +6,7 @@ sudo apt-get install python3-numpy -y
 sudo apt-get install docker -y
 sudo apt-get install docker-compose -y
 
+sudo apt-get install xauth -y
 xhost +local:docker
 XSOCK=/tmp/.X11-unix
 XAUTH=/tmp/.docker.xauth
