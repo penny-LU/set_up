@@ -5,11 +5,14 @@ sudo apt-get install python3-tk -y
 sudo apt-get install python3-numpy -y
 sudo apt-get install docker -y
 sudo apt-get install docker-compose -y
+
 xhost +local:docker
 XSOCK=/tmp/.X11-unix
 XAUTH=/tmp/.docker.xauth
 xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
+
 sudo echo "export ROS_MASTER_URI=http://127.0.0.1" >> ~/.bashrc
+source ~/.bashrc
 
 
 #設定之後開機自動執行腳本
