@@ -9,7 +9,7 @@ from os import lseek
 
 if __name__ == '__main__':
     HOST = '127.0.0.1'
-    PORT = 48331
+    PORT = 8081
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((HOST, PORT))
@@ -25,9 +25,18 @@ if __name__ == '__main__':
             print('server closed connection.')
             break
         else:
-            print('recv1: ' + indata.decode())
-            indata = "python3 execute.py "+ indata.decode()
-            os.system(indata) #pull
+            temp = indata.decode()
+            print('recv: ' + indata.decode())
+            if (temp[0] == "g" and temp[1] == "i" and temp[2] == "t"):
+                temp = temp[4:]
+                instr = "python3 git_hub.py " + temp
+                print('recv0: ' + instr)
+                os.system(instr)
+            else:
+                print('recv1: ' + indata.decode())
+                indata = "python3 execute.py "+ indata.decode()
+                os.system(indata) #pull
+            
             outdata="done!"
 
     exit(0) #end client.py
