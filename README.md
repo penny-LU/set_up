@@ -10,9 +10,13 @@ set up 步驟
 
 (此為測試步驟，之後會有完整的步驟）
 
-// 確認有無連接camera及其掛載位置：
+#確認隨身碟位置：
+lsblk -l
 
-更改docker dir：
+#確認有無連接camera及其掛載位置：
+v4l2-ctl --list-devices
+
+#更改Docker Root Dir：
 
 1. 確保docker已停止
 systemctl stop docker.service
@@ -30,3 +34,8 @@ systemctl start docker.service
 
 4.確認Docker Root Dir是否更改成功
 docker info
+
+#執行小烏龜：
+QT_GRAPHICSSYSTEM="native" docker run -it -e DISPLAY=$DISPLAY -v $XSOCK:$XSOCK -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH chiz0943/ros_neotic 
+#執行real time：
+docker run --device=/dev/video0 -e DISPLAY=$DISPLAY -v $XSOCK:$XSOCK -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH chiz0943/ros_real_time
