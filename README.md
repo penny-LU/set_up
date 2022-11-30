@@ -37,5 +37,7 @@ docker info
 
 #執行小烏龜：
 QT_GRAPHICSSYSTEM="native" docker run -it -e DISPLAY=$DISPLAY -v $XSOCK:$XSOCK -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH chiz0943/ros_neotic 
+
+
 #執行real time：
 docker run --device=/dev/video0 -e DISPLAY=$DISPLAY -v $XSOCK:$XSOCK -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH chiz0943/ros_real_time
