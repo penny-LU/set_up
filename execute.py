@@ -76,7 +76,7 @@ class pull:
     def execute(self):
         count = int(self.image) + int(self.video) + int(self.real_time)
         if ( count == 1) :# 單個image
-            out = "docker pull "
+            out = "sudo docker pull "
             if (image == True or image == "1") :
                 if ( image_output_path != "") :
                     out = out + "chiz0943/image_output_path:latest"
@@ -114,9 +114,9 @@ class start:
 
     def doingImage(self):
         if( self.image_output_path !="0" ):
-            command = "docker run -v " + self.image_path + ":/temp -v " + self.image_output_path + ":/output chiz0943/image_output_path"
+            command = "sudo docker run -v " + self.image_path + ":/temp -v " + self.image_output_path + ":/output chiz0943/image_output_path"
         else :
-            command = "docker run -v " + self.image_path + ":/temp chiz0943/image_only_input"
+            command = "sudo docker run -v " + self.image_path + ":/temp chiz0943/image_only_input"
 
         os.system(command)
         print(command)
@@ -124,16 +124,16 @@ class start:
 
     def doingVideo(self):
         if( self.video_output_path !="0" ):
-            command = "docker run -v " + self.video_path + ":/temp -v " + self.video_output_path + ":/output chiz0943/video_output_path"
+            command = "sudo docker run -v " + self.video_path + ":/temp -v " + self.video_output_path + ":/output chiz0943/video_output_path"
         else :
-            command = "docker run -v " + self.video_path + ":/temp chiz0943/video_only_input"
+            command = "sudo docker run -v " + self.video_path + ":/temp chiz0943/video_only_input"
         os.system(command)
         print(command)
         print("========== Video detection ==========")
 
     def doingRealTime(self): #還需掛載camera的device
-        command = "docker run -v " +self.camera_path+":/temp chiz0943/real_time "
-        #os.system(command)
+        command = "sudo docker run --device=" +self.camera_path+" -e DISPLAY=$DISPLAY -v $XSOCK:$XSOCK -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH -v /tmp/.X11-unix:/tmp/.X11-unix chiz0943/real_time"
+        os.system(command)
         print(command)
         print("========== RealTime detection ==========")
 
