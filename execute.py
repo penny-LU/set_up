@@ -132,7 +132,11 @@ class start:
         print("========== Video detection ==========")
 
     def doingRealTime(self): #還需掛載camera的device
-        command = "sudo docker run --device=" +self.camera_path+" -e DISPLAY=$DISPLAY -v $XSOCK:$XSOCK -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH -v /tmp/.X11-unix:/tmp/.X11-unix chiz0943/real_time"
+
+        command = "echo -n \"sudo docker run --device="
+        command = command + self.camera_path+" -e DISPLAY=\$DISPLAY -v \$XSOCK:\$XSOCK -v \$XAUTH:\$XAUTH -e XAUTHORITY=\$XAUTH  chiz0943/real_time \">> ./real_time.sh"
+        os.system(command)
+        command = "./real_time.sh"
         os.system(command)
         print(command)
         print("========== RealTime detection ==========")
