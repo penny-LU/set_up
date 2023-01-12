@@ -2,8 +2,8 @@
 本範例教程用於設置系統之設備端(client)所需之檔案
 
 **事前設置**
-請先在設備上安裝好docker && docker compose 再執行此教程的步驟
-關於docker可參考此篇教學[Docker 基本安裝](https://github.com/twtrubiks/docker-tutorial)
+* 請先在設備上安裝好docker && docker compose 再執行此教程的步驟
+* 關於docker可參考此篇教學[Docker 基本安裝](https://docs.docker.com/engine/install/ubuntu/)
 
 **set up 步驟**
 1. git clone https://github.com/penny-LU/set_up.git
